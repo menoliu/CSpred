@@ -90,12 +90,14 @@ def calc_sing_pdb(pdb_file_name,pH=5,TP=True,TP_pred=None,ML=True,test=False):
     '''
     if not os.path.isdir(ML_MODEL_PATH):
         raise ValueError("models not installed in {}".format(ML_MODEL_PATH))
-    if pH < 2 or pH > 12:
-        print("Warning! Predictions for proteins in extreme pH conditions are likely to be erroneous. Take prediction results at your own risk!")
+    # @menoliu comment out printing, pH check by SPyCi-PDB
+    #if pH < 2 or pH > 12:
+    #    print("Warning! Predictions for proteins in extreme pH conditions are likely to be erroneous. Take prediction results at your own risk!")
     preds = pd.DataFrame()
     if TP:
         if TP_pred is None:
-            print("Calculating UCBShift-Y predictions ...")
+            # @menoliu comment out print statement
+            #print("Calculating UCBShift-Y predictions ...")
             # generate hash string from pdb file name
             hashed_file_name = str(hash(pdb_file_name) % ((sys.maxsize + 1) * 2)) + '/'
             TP_pred = ucbshifty.main(pdb_file_name, 1, exclude=test, custom_working_dir=hashed_file_name)
@@ -109,7 +111,8 @@ def calc_sing_pdb(pdb_file_name,pH=5,TP=True,TP_pred=None,ML=True,test=False):
                     rc = 0
                 preds[atom+"_Y"] = TP_pred[atom] + rc
     if ML:
-        print("Generating features ...")
+        # @menoliu comment out print statement
+        #print("Generating features ...")
         feats = build_input(pdb_file_name, pH)
         feats.rename(index=str, columns=sparta_rename_map, inplace=True) # Rename columns so that random coil columns can be correctly recognized
         resnames = feats["RESNAME"]
@@ -119,7 +122,8 @@ def calc_sing_pdb(pdb_file_name,pH=5,TP=True,TP_pred=None,ML=True,test=False):
 
         result = {"RESNUM":resnums, "RESNAME":resnames}
         for atom in toolbox.ATOMS:
-            print("Calculating UCBShift-X predictions for %s ..." % atom)
+            # @menoliu comment out print statement
+            #print("Calculating UCBShift-X predictions for %s ..." % atom)
             # Predictions for each atom
             atom_feats = prepare_data_for_atom(feats, atom)
             r0 = joblib.load(ML_MODEL_PATH + "%s_R0.sav" % atom)
@@ -133,7 +137,8 @@ def calc_sing_pdb(pdb_file_name,pH=5,TP=True,TP_pred=None,ML=True,test=False):
             result[atom+"_X"] = r1_pred + rcoils["RCOIL_"+atom]
 
             if TP:
-                print("Calculating UCBShift predictions for %s ..." % atom)
+                # @menoliu comment out print statement
+                #print("Calculating UCBShift predictions for %s ..." % atom)
                 feats_r2 = atom_feats.copy()
                 feats_r2["RESNAME"] = resnames
                 feats_r2["RESNUM"] = resnums
@@ -204,7 +209,8 @@ if __name__ == "__main__":
         for idx, item in enumerate(inputs):
             preds = calc_sing_pdb(item[0], item[1], TP=not args.shiftx_only, ML=not args.shifty_only, test=args.test)
             preds.to_csv(SAVE_PREFIX + os.path.basename(item[0]).replace(".pdb", ".csv"), index=None)
-            print("Finished prediction for %s (%d/%d)" % (item[0], idx + 1, len(inputs)))    
-    
-    print("Complete!")
+            # @menoliu comment out print statement
+            #print("Finished prediction for %s (%d/%d)" % (item[0], idx + 1, len(inputs)))    
+    # @menoliu comment out print statement
+    #print("Complete!")
    
