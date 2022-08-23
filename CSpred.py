@@ -126,12 +126,14 @@ def calc_sing_pdb(pdb_file_name,pH=5,TP=True,TP_pred=None,ML=True,test=False):
             #print("Calculating UCBShift-X predictions for %s ..." % atom)
             # Predictions for each atom
             atom_feats = prepare_data_for_atom(feats, atom)
-            r0 = joblib.load(ML_MODEL_PATH + "%s_R0.sav" % atom)
+            # @menoliu change to n_jobs=1 to enable multiprocessing
+            r0 = joblib.load(ML_MODEL_PATH + "%s_R0.sav" % atom).set_params(n_jobs=1)
             r0_pred = r0.predict(atom_feats.values)
 
             feats_r1 = atom_feats.copy()
             feats_r1["R0_PRED"] = r0_pred
-            r1 = joblib.load(ML_MODEL_PATH + "%s_R1.sav" % atom)
+            # @menoliu change to n_jobs=1 to enable multiprocessing
+            r1 = joblib.load(ML_MODEL_PATH + "%s_R1.sav" % atom).set_params(n_jobs=1)
             r1_pred = r1.predict(feats_r1.values)
             # Write ML predictions
             result[atom+"_X"] = r1_pred + rcoils["RCOIL_"+atom]
@@ -156,7 +158,8 @@ def calc_sing_pdb(pdb_file_name,pH=5,TP=True,TP_pred=None,ML=True,test=False):
                 valid_feats_r2 = feats_r2.drop(["RESNAME","RESNUM","RESNAME_TP"], axis=1)[valid]
                 r2_pred = r1_pred.copy()
                 if len(valid_feats_r2):
-                    r2 = joblib.load(ML_MODEL_PATH + "%s_R2.sav" % atom)
+                    # @menoliu change to n_jobs=1 to enable multiprocessing
+                    r2 = joblib.load(ML_MODEL_PATH + "%s_R2.sav" % atom).set_params(n_jobs=1)
                     r2_pred_valid = r2.predict(valid_feats_r2.values)
                     r2_pred[valid] = r2_pred_valid
                 # Write final predictions
