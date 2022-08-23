@@ -162,7 +162,7 @@ def calc_sing_pdb(pdb_file_name,pH=5,TP=True,TP_pred=None,ML=True,test=False):
                 # Write final predictions
                 result[atom+"_UCBShift"] = r2_pred + rcoils["RCOIL_"+atom]
         preds = pd.DataFrame(result)
-    return preds
+    return pdb_file_name, preds
 
         
 
