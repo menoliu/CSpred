@@ -1257,8 +1257,9 @@ class PDB_SPARTAp_DataReader(BaseDataReader):
                 df.loc[i, bfact_names] = bfact_prev + [df_1res.loc[i, 'AVG_B']] + bfact_next
                 if sequence_columns > 0:
                     df.loc[i, seq_match_cols] = list(df_1res.loc[i, seq_match_cols])
-
-            full_df = full_df.append(df)
+            # @menoliu change to concat so FutureWarning message does not occur
+            #full_df = full_df.append(df)
+            full_df = pd.concat([full_df, df])
         return full_df
 
 
