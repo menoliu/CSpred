@@ -43,7 +43,8 @@ os.environ["BLASTDB"]=SCRIPT_PATH+"/refDB/"  # Set the refDB position
 # Decompress refDB pdb files if they don't exist
 if not os.path.exists(SCRIPT_PATH+"/refDB/pdbs/"):
     os.makedirs(SCRIPT_PATH+"/refDB/pdbs")
-    print("Decompressing mTM-align database...")
+    # @menoliu comment out print statement
+    #print("Decompressing mTM-align database...")
     os.system("tar -xzf %s/refDB/pdbs.tgz -C %s/refDB/"%(SCRIPT_PATH,SCRIPT_PATH))
 
 # ================ Define Random Coils ======================
@@ -103,8 +104,9 @@ def read_sing_chain_PDB(path,fix_unknown_res=True,remove_alternate_res=True):
     '''
     parser=PDB.PDBParser()
     struc=parser.get_structure("query",path)
-    if len(struc)>1:
-        print("Multiple models exist in this pdb file! Only the first model is taken.")
+    #if len(struc)>1:
+        # @menoliu comment out print statement
+        #print("Multiple models exist in this pdb file! Only the first model is taken.")
     struc=struc[0]
     assert len(struc)==1,"Multiple chains exist in this pdb file!"
     chain=struc.child_list[0]
@@ -113,15 +115,18 @@ def read_sing_chain_PDB(path,fix_unknown_res=True,remove_alternate_res=True):
         existing_resnum=[]
         for i in range(len(chain.child_list)):
             if chain.child_list[i].resname in EXTERNAL_MAPPINGS:
-                print("Warning: residue %s[%d] is recognized as %s"%(chain.child_list[i].resname,chain.child_list[i].id[1],EXTERNAL_MAPPINGS[chain.child_list[i].resname]))
+                # @menoliu comment out print statement
+                #print("Warning: residue %s[%d] is recognized as %s"%(chain.child_list[i].resname,chain.child_list[i].id[1],EXTERNAL_MAPPINGS[chain.child_list[i].resname]))
                 chain.child_list[i].resname=EXTERNAL_MAPPINGS[chain.child_list[i].resname]
             elif chain.child_list[i].resname not in toolbox.protein_dict:
                 # Removing the unrecognized residues
-                print("Warning: Unknown residue encountered: %s[%d]"%(chain.child_list[i].resname,chain.child_list[i].id[1]))
+                # @menoliu comment out print statement
+                #print("Warning: Unknown residue encountered: %s[%d]"%(chain.child_list[i].resname,chain.child_list[i].id[1]))
                 deletion.append(chain.child_list[i].id)
             if remove_alternate_res:
                 if chain.child_list[i].id[1] in existing_resnum:
-                    print("Warning: residue %s[%d%s] ignored because it is an alternate residue"%(chain.child_list[i].resname,chain.child_list[i].id[1],chain.child_list[i].id[2]))
+                    # @menoliu comment out print statement
+                    #print("Warning: residue %s[%d%s] ignored because it is an alternate residue"%(chain.child_list[i].resname,chain.child_list[i].id[1],chain.child_list[i].id[2]))
                     deletion.append(chain.child_list[i].id)
                 else:
                     existing_resnum.append(chain.child_list[i].id[1])
@@ -535,8 +540,9 @@ def main(path,strict,secondary=False,test=False,exclude=False,shifty=False,blast
         result_dict={"RESNAME":residues,"RESNUM":resnum}
         df=pd.DataFrame(result_dict)
         for atom in toolbox.ATOMS:
-            df[atom]=np.nan           
-        print("No sequence in database generates possible alignments")
+            df[atom]=np.nan
+        # @menoliu comment out print statement
+        #print("No sequence in database generates possible alignments")
         if os.path.exists(fixname):
             os.remove(fixname)
         for atom in toolbox.ATOMS:
@@ -576,14 +582,16 @@ def main(path,strict,secondary=False,test=False,exclude=False,shifty=False,blast
         residues=toolbox.decode_seq(seq)
         result_dict={"RESNAME":residues,"RESNUM":resnum}
         df=pd.DataFrame(result_dict)
-        print("No significant structure alignment is possible!")
+        # @menoliu comment out print statement
+        #print("No significant structure alignment is possible!")
         for atom in toolbox.ATOMS:
             df[atom]=np.nan           
             df[atom+"_BEST_REF_SCORE"]=0
             df[atom+"_BEST_REF_COV"]=0
             df[atom+"_BEST_REF_MATCH"]=0
         return df
-    print("Calculating using %d references with maximal identity %.2f"%(len(final),np.max(identities)))
+    # @menoliu comment out print statement
+    #print("Calculating using %d references with maximal identity %.2f"%(len(final),np.max(identities)))
     refDB={}
     for item in final:
         refDB[item.target_name]=pd.read_csv(refDB_shifts_path+item.target_name+".csv")
