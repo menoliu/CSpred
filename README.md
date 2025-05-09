@@ -2,8 +2,9 @@
 
 UCBShift is a program for predicting chemical shifts for backbone and side chain atoms of a protein in solution. The program implements two mechanisms:  a transfer prediction module that employs both sequence alignment and structure alignment to select references for shift replication; and an ensemble decision tree based machine learning module which takes features extracted from a PDB file and makes trustful chemical shift predictions. When combined together, this new predictor achieves state-of-the-art accuracy for predicting chemical shifts in a "real-world" dataset, with root-mean-square errors of  0.38, 0.22, 1.31, 0.97, 1.29 and 2.16 ppm between prediction and experimental values for H, Hα, C, Cα, Cβ and N.
 
-## Publication
+## Publications
 Li, J., Bennett, K. C., Liu, Y., Martin, M. V., & Head-Gordon, T. (2020). Accurate prediction of chemical shifts for aqueous protein structure on “Real World” data. _Chemical Science_, 11(12), 3180-3191. DOI: [10.1039/C9SC06561J](https://pubs.rsc.org/en/content/articlehtml/2020/sc/c9sc06561j)
+Ptaszek, A. L., Li, J., Konrat, R., Platzer, G., & Head-Gordon, T. (2024). UCBShift 2.0: Bridging the gap from backbone to side chain protein chemical shift prediction for protein structures. _Journal of the American Chemical Society_, 146(46), 31733-31745. DOI: [10.1021/jacs.4c10474](https://pubs.acs.org/doi/10.1021/jacs.4c10474)
 
 ## Software package requirements
 ### Python and python packages
@@ -19,6 +20,7 @@ Li, J., Bennett, K. C., Liu, Y., Martin, M. V., & Head-Gordon, T. (2020). Accura
 * blast (2.9.0, https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
 * mTM-align (20180725, http://yanglab.nankai.edu.cn/mTM-align/)
 * DSSP (2.04, https://swift.cmbi.umcn.nl/gv/dssp/)
+* reduce (3.23, https://github.com/rlabduke/reduce)
 
 ### Installation notes
 We suggest creating new virtual environments (i.e. anaconda) for the code. You can install the required packages using the provided `requirements.txt` file
@@ -28,7 +30,7 @@ pip install -r requirements.txt
 However you still need to download and install the external programs manually.
 
 ## Usage
-Because the trained models are big, users are directed to [here](https://datadryad.org/stash/share/6vbrswTtNRcHk2vV3e6P1QGH1yYMhvdHDlauysTCObE) to download all the saved model files. After downloading the models.tgz file, extract them into the `models/` folder using the command `tar -xzf models.tgz` (so that there will be 18 .sav files under `models/` folder)<br>
+Because the trained models are big, users are directed to [here](https://doi.org/10.5281/zenodo.15375968) to download all the saved model files. After downloading the models.zip file, extract them into the `models/` folder (so that there will be 141 .sav files under `models/` folder)<br>
 Users can use the trained model "as is" once they have correctly configured the python packages and external programs.
 The [`CSpred.py`](https://github.com/JerryJohnsonLee/CSpred/blob/master/CSpred.py) file is the entrance to UCBShift chemical shift predictor. <br>
 The easiest, out-of-the-box way of using UCBShift is running CSpred.py script directly on your desired protein. A [shifts.csv] file will be generated at the same position where you executed the script. The syntax will be something like this:
