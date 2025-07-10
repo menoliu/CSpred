@@ -18,6 +18,12 @@ import sys
 if sys.version_info.major < 3 or sys.version_info.major == 3 and sys.version_info.minor < 5:
     raise ValueError("Python >= 3.5 required")
 
+# @menoliu mute all warnings
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+
 
 # Suppress Setting With Copy warnings
 pd.options.mode.chained_assignment = None
