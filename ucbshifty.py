@@ -12,14 +12,17 @@ from Bio import SeqIO
 from Bio import Align
 from Bio.SubsMat.MatrixInfo import blosum62
 from save_pdb import PDBSaver
-import subprocess
 import os
 import shutil
-import sys
 import toolbox
 import pandas as pd
 import numpy as np
 import argparse
+
+# @menoliu mute PerformanceWarning
+import warnings
+warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
+
 
 DEBUG=False
 GLOBAL_TEST_CUTOFF=0.99
@@ -199,12 +202,9 @@ def read_sing_chain_PDB(path,fix_unknown_res=True,remove_alternate_res=True):
     '''
     parser=PDB.PDBParser()
     struc=parser.get_structure("query",path)
+    # @menoliu comment out print statement
     #if len(struc)>1:
-        # @menoliu comment out print statement
-        #print("Multiple models exist in this pdb file! Only the first model is taken.")
-    #print(path)
-    if len(struc)>1:
-        print("Multiple models exist in this pdb file! Only the first model is taken.")
+    #    print("Multiple models exist in this pdb file! Only the first model is taken.")
     struc=struc[0]
     try:
         assert len(struc) == 1
