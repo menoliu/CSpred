@@ -193,7 +193,7 @@ if __name__ == "__main__":
         ML_MODEL_PATH = args.models
  
     if not args.batch:
-        preds = calc_sing_pdb(args.input, args.pH, TP=not args.shiftx_only, ML=not args.shifty_only, test=args.test)
+        _, preds = calc_sing_pdb(args.input, args.pH, TP=not args.shiftx_only, ML=not args.shifty_only, test=args.test)
         preds.to_csv(args.output, index=None)
     else:
         inputs = []
@@ -216,7 +216,7 @@ if __name__ == "__main__":
                 SAVE_PREFIX = SAVE_PREFIX + "/"
 
         for idx, item in enumerate(inputs):
-            preds = calc_sing_pdb(item[0], item[1], TP=not args.shiftx_only, ML=not args.shifty_only, test=args.test)
+            _, preds = calc_sing_pdb(item[0], item[1], TP=not args.shiftx_only, ML=not args.shifty_only, test=args.test)
             preds.to_csv(SAVE_PREFIX + os.path.basename(item[0]).replace(".pdb", ".csv"), index=None)
             # @menoliu comment out print statement
             #print("Finished prediction for %s (%d/%d)" % (item[0], idx + 1, len(inputs)))    
